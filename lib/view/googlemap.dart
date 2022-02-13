@@ -1,50 +1,90 @@
 import 'dart:async';
+import 'package:bicycle_flutter/func/fetch_last_geo.dart';
 
-import 'package:bicycle_flutter/model/getgeo.dart';
+import 'package:bicycle_flutter/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bicycle_flutter/func/fetch_last_geo.dart';
 
 class GMap extends StatefulWidget {
   @override
   _GMapState createState() => _GMapState();
 }
 
-class _GMapState extends State<GMap> {
-  // GetCurPosition geo = Get.put(GetCurPosition());
+class _GMapState extends State<GMap> with WidgetsBindingObserver {
+  // late final SharedPreferences prefs;
 
+  final double _lat = LastGeo.lat;
+  double _lon = LastGeo.lon;
   GoogleMapController? _controller;
   bool enableStream = true;
   late StreamSubscription<LocationData> lcs;
-
   Location currentLocation = Location();
-  Set<Marker> _markers = {};
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+
+    setState(() {
+      getLocation();
+    });
+  }
+
+  void pauseStream() {
+    print('puase');
+    lcs.pause();
+  }
+
+  void resumeStream() {
+    print('resume');
+    lcs.resume();
+  }
+
+  @override
+  void dispose() {
+    lcs.cancel();
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.detached) return;
+
+    final isBackground = state == AppLifecycleState.paused;
+
+    if (isBackground) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setDouble('lat', _lat);
+      prefs.setDouble('lon', _lon);
+      print('bakc $_lat');
+    }
+  }
+
+  final Set<Marker> _markers = {};
   var location;
   void getLocation() async {
     // location = await currentLocation.getLocation();
     lcs = currentLocation.onLocationChanged.listen((LocationData loc) {
-      _controller
-          ?.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-        target: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0),
+      // lat = loc.latitude!;
+      // _lon = loc.longitude!;
+      _controller?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(loc.latitude ?? _lat, loc.longitude ?? _lon),
         zoom: 15.0,
       )));
-      print(loc.latitude);
-      print(loc.longitude);
+
       // setState(() { // 마커 변경할때 씀.
       //   _markers.add(Marker(
       //       markerId: MarkerId('Home'),
       //       position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)));
       // });
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      getLocation();
     });
   }
 
@@ -61,18 +101,18 @@ class _GMapState extends State<GMap> {
     //         ),
     //       )
     //     :
-    return Container(
+    return SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Stack(children: <Widget>[
           GoogleMap(
             // zoomControlsEnabled: false,
-            // myLocationEnabled: true,
+            myLocationEnabled: true,
             myLocationButtonEnabled: false,
             mapToolbarEnabled: false,
 
             initialCameraPosition: CameraPosition(
-              target: LatLng(48.8561, 2.2930),
+              target: LatLng(_lat, _lon),
               zoom: 15.0,
             ),
             onMapCreated: (GoogleMapController controller) {
@@ -123,7 +163,7 @@ class _GMapState extends State<GMap> {
                   ],
                 ),
                 child: IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       setState(() {
                         enableStream = !enableStream;
                       });
@@ -162,21 +202,5 @@ class _GMapState extends State<GMap> {
             ],
           ))
     ]);
-  }
-
-  void pauseStream() {
-    print('puase');
-    lcs.pause();
-  }
-
-  void resumeStream() {
-    print('resume');
-    lcs.resume();
-  }
-
-  @override
-  dispose() {
-    lcs.cancel();
-    super.dispose();
   }
 }
