@@ -13,9 +13,9 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: Appbar(),
-      drawer: Side(),
-      floatingActionButton: FAB(),
+      appBar: const Appbar(),
+      drawer: const Side(),
+      // floatingActionButton: const FAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: GMap(),
     );

@@ -1,24 +1,11 @@
+import 'dart:async';
+
 import 'package:bicycle_flutter/model/getgeo.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
-
-// Future<Uint8List> getBytesFromAsset({String path,int width})async {
-// ByteData data = await rootBundle.load(path);
-// ui.Codec codec = await ui.instantiateImageCodec(
-//    data.buffer.asUint8List(),
-//    targetWidth: width
-//  );
-// ui.FrameInfo fi = await codec.getNextFrame();
-// return (await fi.image.toByteData(
-//    format: ui.ImageByteFormat.png))
-//  .buffer.asUint8List();
-// }
-
-// Marker demo= new Marker(
-// markerId: MarkerId(“marker_id”),
-// infoWindow: InfoWindow(title:_currentAddress),
-// );
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 class GMap extends StatefulWidget {
   @override
@@ -26,124 +13,170 @@ class GMap extends StatefulWidget {
 }
 
 class _GMapState extends State<GMap> {
-  late GoogleMapController mapController; //contrller for Google map
+  // GetCurPosition geo = Get.put(GetCurPosition());
+
+  GoogleMapController? _controller;
   bool enableStream = true;
-  LatLng? myLoc;
-  GetCurPosition geo = Get.put(GetCurPosition());
-  LatLng? curPosition = const LatLng(27.7089427, 85.3086209);
+  late StreamSubscription<LocationData> lcs;
+
+  Location currentLocation = Location();
+  Set<Marker> _markers = {};
+  var location;
+  void getLocation() async {
+    // location = await currentLocation.getLocation();
+    lcs = currentLocation.onLocationChanged.listen((LocationData loc) {
+      _controller
+          ?.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+        target: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0),
+        zoom: 15.0,
+      )));
+      print(loc.latitude);
+      print(loc.longitude);
+      // setState(() { // 마커 변경할때 씀.
+      //   _markers.add(Marker(
+      //       markerId: MarkerId('Home'),
+      //       position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)));
+      // });
+    });
+  }
 
   @override
   void initState() {
-    print('구글맵 시작');
-    geo.getCurPosition();
+    super.initState();
+    setState(() {
+      getLocation();
+    });
   }
-
-  final Set<Marker> markers = {}; //markers for google map
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
-      GoogleMap(
-        initialCameraPosition: CameraPosition(
-          //innital position in map
-          target: curPosition!, //initial position
-          zoom: 15.0, //initial zoom level
-        ),
-        // myLocationButtonEnabled: true,
-        // myLocationEnabled: true,
-        zoomControlsEnabled: false,
+    // return location == null
+    //     ? Container(
+    //         child: Center(
+    //           child: Text(
+    //             'loading map..',
+    //             style: TextStyle(
+    //                 fontFamily: 'Avenir-Medium', color: Colors.grey[400]),
+    //           ),
+    //         ),
+    //       )
+    //     :
+    return Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Stack(children: <Widget>[
+          GoogleMap(
+            // zoomControlsEnabled: false,
+            // myLocationEnabled: true,
+            myLocationButtonEnabled: false,
+            mapToolbarEnabled: false,
 
-        // markers: getmarkers(), //markers to show on map
-        mapType: MapType.normal, //map type
-        onMapCreated: (controller) {
-          //method called when map is created
-          setState(() {
-            mapController = controller;
-          });
-        },
-      ),
-      Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GetBuilder<GetCurPosition>(
-                    builder: (_) {
-                      return Text(
-                          "Current Geo Value : lat: ${_.latitude}, lon: ${_.longitude}");
-                    },
-                  )
-                ],
-              ),
+            initialCameraPosition: CameraPosition(
+              target: LatLng(48.8561, 2.2930),
+              zoom: 15.0,
             ),
-          ]),
-      Positioned(
-        bottom: 100,
-        right: 10,
-        child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: const Color.fromRGBO(245, 249, 245, 1),
-              // borderRadius: BorderRadius.only(
-              //   topLeft: Radius.circular(10),
-              //     topRight: Radius.circular(10),
-              //     bottomLeft: Radius.circular(10),
-              //     bottomRight: Radius.circular(10)
-              // ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: const Offset(0, 3), // changes position of shadow
+            onMapCreated: (GoogleMapController controller) {
+              _controller = controller;
+            },
+            markers: _markers,
+          ),
+          // Row(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     crossAxisAlignment: CrossAxisAlignment.center,
+          //     children: [
+          //       Expanded(
+          //         child: Column(
+          //           mainAxisAlignment: MainAxisAlignment.center,
+          //           crossAxisAlignment: CrossAxisAlignment.center,
+          //           children: [
+          //             // GetBuilder<GetCurPosition>(
+          //             //   builder: (_) {
+          //             //     return Text(
+          //             //         "Current Geo Value : lat: ${_.latitude}, lon: ${_.longitude}");
+          //             //   },
+          //             // )
+          //           ],
+          //         ),
+          //       ),
+          //     ]),
+          Positioned(
+            bottom: 100,
+            right: 10,
+            child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(245, 249, 245, 1),
+                  // borderRadius: BorderRadius.only(
+                  //   topLeft: Radius.circular(10),
+                  //     topRight: Radius.circular(10),
+                  //     bottomLeft: Radius.circular(10),
+                  //     bottomRight: Radius.circular(10)
+                  // ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: IconButton(
-                onPressed: () {
-                  // initialPosition;
-                  setState(() {
-                    enableStream = !enableStream;
-                  });
-                  if (enableStream) {
-                    print('enable');
-                    geo.getCurPosition;
-                  } else {
-                    print('disable');
-                    geo.disableStream();
-                  }
-                },
-                icon: Icon(
-                  Icons.gps_fixed,
-                  color: enableStream ? Colors.blue : Colors.grey,
-                ))),
-      )
+                child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        enableStream = !enableStream;
+                      });
+                      if (enableStream) {
+                        print('enable');
+                        resumeStream();
+                      } else {
+                        print('disable');
+                        pauseStream();
+                      }
+                    },
+                    icon: Icon(
+                      Icons.gps_fixed,
+                      color: enableStream ? Colors.blue : Colors.grey,
+                    ))),
+          )
+        ]));
+  }
+
+  Widget getBottomSheet(String s) {
+    return Stack(children: <Widget>[
+      Container(
+          margin: EdgeInsets.only(top: 32),
+          color: Colors.white,
+          child: Column(
+            children: <Widget>[
+              Container(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: FloatingActionButton(
+                      child: Icon(Icons.navigation), onPressed: () {}),
+                ),
+              )
+            ],
+          ))
     ]);
   }
 
-  Set<Marker> getmarkers() {
-    //markers to place on map
-    setState(() {
-      markers.add(Marker(
-        //add first marker
-        markerId: MarkerId(curPosition.toString()),
-        position: curPosition!, //position of marker
-        infoWindow: const InfoWindow(
-          //popup info
-          title: 'Marker Title First ',
-          snippet: 'My Custom Subtitle',
-        ),
-        icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-      ));
+  void pauseStream() {
+    print('puase');
+    lcs.pause();
+  }
 
-      //add more markers here
-    });
+  void resumeStream() {
+    print('resume');
+    lcs.resume();
+  }
 
-    return markers;
+  @override
+  dispose() {
+    lcs.cancel();
+    super.dispose();
   }
 }
