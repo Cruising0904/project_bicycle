@@ -1,13 +1,7 @@
-// import ‘package:flutter/services.dart’ show rootBundle;
-// import ‘dart:ui’ as ui;
-// import 'dart:typed_data';
-import 'package:bicycle_flutter/func/firebata.dart';
-// import 'package:bicycle_flutter/func/get_current_location.dart';
 import 'package:bicycle_flutter/model/getgeo.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 // Future<Uint8List> getBytesFromAsset({String path,int width})async {
 // ByteData data = await rootBundle.load(path);
@@ -27,28 +21,25 @@ import 'package:provider/provider.dart';
 // );
 
 class GMap extends StatefulWidget {
-  const GMap({Key? key}) : super(key: key);
-
   @override
   _GMapState createState() => _GMapState();
 }
 
 class _GMapState extends State<GMap> {
   late GoogleMapController mapController; //contrller for Google map
-  LatLng? curPosition = LatLng(27.7089427, 85.3086209);
-// FutuerProvider<LatLng>() {
-
-// }
-  final GetCurPosition gcp = GetCurPosition();
+  bool enableStream = true;
+  LatLng? myLoc;
+  GetCurPosition geo = Get.put(GetCurPosition());
+  LatLng? curPosition = const LatLng(27.7089427, 85.3086209);
 
   @override
   void initState() {
-    gcp.getCurPosition;
+    print('구글맵 시작');
+    geo.getCurPosition();
   }
 
   final Set<Marker> markers = {}; //markers for google map
 
-  bool enableStream = true;
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
@@ -72,22 +63,24 @@ class _GMapState extends State<GMap> {
         },
       ),
       Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                color: Colors.red,
-                child: null,
-              )
-              // child: Text('gps data Lat: ${LatLng}')),
-            ],
-          )
-        ],
-      ),
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GetBuilder<GetCurPosition>(
+                    builder: (_) {
+                      return Text(
+                          "Current Geo Value : lat: ${_.latitude}, lon: ${_.longitude}");
+                    },
+                  )
+                ],
+              ),
+            ),
+          ]),
       Positioned(
         bottom: 100,
         right: 10,
@@ -118,16 +111,12 @@ class _GMapState extends State<GMap> {
                     enableStream = !enableStream;
                   });
                   if (enableStream) {
-                    print('stream');
-                    gcp.getCurPosition;
+                    print('enable');
+                    geo.getCurPosition;
                   } else {
-                    // GetCurrentLocation;
-                    // getPosition().then((value) => print(value));
-                    print('stop');
-                    gcp.disableStream();
+                    print('disable');
+                    geo.disableStream();
                   }
-                  // positionStream;
-                  // retrieve();
                 },
                 icon: Icon(
                   Icons.gps_fixed,

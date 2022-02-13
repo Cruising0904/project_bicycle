@@ -1,9 +1,7 @@
 import 'package:bicycle_flutter/layout/home.dart';
-import 'package:bicycle_flutter/test/test.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
-// import 'package:bicycle_flutter/firebase_options.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,11 +9,13 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  static Future<FirebaseApp> _fbApp = Firebase.initializeApp();
+
+  MyApp({Key? key}) : super(key: key);
+  static final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
         title: 'bicycle',
         theme: ThemeData(
           fontFamily: 'CookieRun',
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
               }
             })
         // home: Scaffold(
-        //   body: HomePage(),
+        //   body: Test(),
         // ),
         );
   }

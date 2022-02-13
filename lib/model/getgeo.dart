@@ -1,61 +1,40 @@
 import 'dart:async';
-import 'package:flutter/src/foundation/change_notifier.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:get/get.dart';
+
 import 'package:location/location.dart';
-import 'package:provider/provider.dart';
 
-class GetCurPosition extends ChangeNotifier {
-  GetCurPosition();
-  LatLng? _myLoc;
+class GetCurPosition extends GetxController {
+  var latitude;
+  var longitude;
+  var m2 = <String, double>{};
 
-  LatLng? get myLoc => _myLoc;
-  get getCurPosition => _getCurPosition();
-  get gpc => _gpc;
   late StreamSubscription<dynamic> _gpc;
 
-  _getCurPosition() async {
+  StreamSubscription<dynamic> get gpc => _gpc;
+
+  getCurPosition() async {
     print('getposition');
-    bool serviceEnabled;
-    LocationPermission permission;
+    // bool serviceEnabled;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    _gpc = Location.instance.onLocationChanged.listen((event) {
-      print('스트림 ${event.accuracy}');
+    _gpc = Location.instance.onLocationChanged.listen((data) {
+      // latitude = data.latitude.obs;
+      latitude = data.latitude.obs;
+      longitude = data.longitude.obs;
+      // longitude = data.longitude.obs;
+      update();
+      print(data.latitude);
+      // print('print $latitude');
     });
-
-    // print('stream data $_getCurPosition');
-
-    // var currentPosition = await Geolocator.getCurrentPosition();
-    // _myLoc = LatLng(currentPosition.latitude, currentPosition.longitude);
-    // print('my curPosition $_myLoc');
   }
 
-  // @override
-  // void dispose() {
-  //   _getCurPosition.cancel();
-  //   super.dispose();
-  // }
   void disableStream() {
     print('disable');
     _gpc.cancel();
-    // super.dispose();
+  }
+
+  @override
+  void dispose() {
+    _gpc.cancel();
+    super.dispose();
   }
 }
