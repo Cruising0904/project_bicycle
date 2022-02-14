@@ -18,7 +18,7 @@ class GMap extends StatefulWidget {
 class _GMapState extends State<GMap> with WidgetsBindingObserver {
   // late final SharedPreferences prefs;
 
-  final double _lat = LastGeo.lat;
+  double _lat = LastGeo.lat;
   double _lon = LastGeo.lon;
   GoogleMapController? _controller;
   bool enableStream = true;
@@ -73,11 +73,11 @@ class _GMapState extends State<GMap> with WidgetsBindingObserver {
   void getLocation() async {
     // location = await currentLocation.getLocation();
     lcs = currentLocation.onLocationChanged.listen((LocationData loc) {
-      // lat = loc.latitude!;
-      // _lon = loc.longitude!;
+      _lat = loc.latitude!;
+      _lon = loc.longitude!;
       _controller?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: LatLng(loc.latitude ?? _lat, loc.longitude ?? _lon),
-        zoom: 15.0,
+        zoom: 17.0,
       )));
 
       // setState(() { // 마커 변경할때 씀.
@@ -106,14 +106,15 @@ class _GMapState extends State<GMap> with WidgetsBindingObserver {
         width: MediaQuery.of(context).size.width,
         child: Stack(children: <Widget>[
           GoogleMap(
-            // zoomControlsEnabled: false,
-            myLocationEnabled: true,
+         
+            // myLocationEnabled: true,
+
             myLocationButtonEnabled: false,
             mapToolbarEnabled: false,
-
+            zoomControlsEnabled: false,
             initialCameraPosition: CameraPosition(
               target: LatLng(_lat, _lon),
-              zoom: 15.0,
+              zoom: 17.0,
             ),
             onMapCreated: (GoogleMapController controller) {
               _controller = controller;
