@@ -1,8 +1,9 @@
-import 'package:bicycle_flutter/func/google_signin.dart';
+import 'package:bicycle_flutter/func/qrscanner.dart';
 import 'package:bicycle_flutter/layout/home.dart';
 import 'package:bicycle_flutter/view/components/modalbottom.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class FAB extends StatelessWidget {
   const FAB({
@@ -19,8 +20,10 @@ class FAB extends StatelessWidget {
           if (Home.hasData == false) {
             modal();
           } else {
-            
             print('hasData is not null');
+            Navigator.of(ctx)
+                .push(MaterialPageRoute(builder: (context) => const QRScan()));
+            // Get.to(QRScan());
           }
           // GoogleSignInProvider.to.googleLogin();
         },

@@ -8,8 +8,8 @@ class LastGeo {
   static late LatLng lastPosition;
   static Future init() async {
     _preferences = await SharedPreferences.getInstance();
-    lat = _preferences.getDouble('lat') ?? 0;
-    lon = _preferences.getDouble('lon') ?? 0;
+    lat = _preferences.getDouble('lat')!;
+    lon = _preferences.getDouble('lon')!;
     print('lastgeo $lat, $lon');
   }
 }

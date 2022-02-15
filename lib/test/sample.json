@@ -1,0 +1,156 @@
+{
+    "bikes": 
+        {
+            "bike1": {
+                "latitude": 37.518265650514515,
+                "longitude": 126.72358891969118,
+                "uuid": "cadc4071-d2ed-4032-a990-3c3644a30278"
+            },
+            "bike2": {
+                "latitude": 37.51729961728024,
+                "longitude": 126.72390468411487,
+                "uuid": "43502550-49c8-43f6-9dab-34875c40e684"
+            },
+            "bike3": {
+                "latitude": 37.518473167122245,
+                "longitude": 126.72573611746607,
+                "uuid": "d59cbc14-8637-4a7a-b17f-7538c33fa1e4"
+            },
+            "bike4": {
+                "latitude": 37.51693466814044,
+                "longitude": 126.72387761859737,
+                "uuid": "420e69c4-d745-4f3d-a8aa-204c6c0677ba"
+            },
+            "bike5": {
+                "latitudeitude": 37.51796510817565,
+                "longitude": 126.71955615763565,
+                "uuid": "3afd3073-f188-4239-8b3a-00e639b0401f"
+            },
+            "bike6": {
+                "latitude": 37.51587558994349,
+                "longitude": 126.72211835995952,
+                "uuid": "2cf57fba-ea08-4d1a-bac9-d9e9ac75bcf0"
+            },
+            "bike7": {
+                "latitude": 37.51690604460299,
+                "longitude": 126.7235257668698,
+                "uuid": "5acd8122-3a2c-4931-bf2a-9b41c04dc42f"
+            },
+            "bike8": {
+                "latitude": 37.51843023269718,
+                "longitude": 126.72643079908207,
+                "uuid": "431f4a0c-cd11-47ae-8424-85ba813b2f1b"
+            },
+            "bike9": {
+                "latitude": 37.51714218845843,
+                "longitude": 126.72579927034027,
+                "uuid": "79433d65-51f0-4f29-b663-4b9fd83aa219"
+            },
+            "bike10": {
+                "latitude": 37.51640513092076,
+                "longitude": 126.72459936573082,
+                "uuid": "dddc5067-43c1-4a75-adbb-2ab9a3030f34"
+            },
+            "bike11": {
+                "latitude": 37.51731392897483,
+                "longitude": 126.7224882553654,
+                "uuid": "8e37b432-413b-4a50-96d5-31a33a800521"
+            },
+            "bike12": {
+                "latitude": 37.51459465769782,
+                "longitude": 126.7214507438181,
+                "uuid": "81f2015c-a543-4655-9435-d2e098f7de94"
+            },
+            "bike13": {
+                "latitude": 37.515753938087464,
+                "longitude": 126.72533013466055,
+                "uuid": "a1798832-4466-47be-8a9d-a282676429df"
+            },
+            "bike14": {
+                "latitude": 37.51664127634164,
+                "longitude": 126.72690895651502,
+                "uuid": "ab574ffa-6dd3-465c-978f-f86671f57294"
+            },
+            "bike15": {
+                "latitude": 37.51692035635341,
+                "longitude": 126.7235077231485,
+                "uuid": "87f702eb-abaf-4eb0-badc-b77aa3fde888"
+            },
+            "bike16": {
+                "latitude": 37.51553210187535,
+                "longitude": 126.72276793233668,
+                "uuid": "2d63e822-f5e7-4d77-9061-e5a29ed31d6a"
+            },
+            "bike17": {
+                "latitude": 37.516712835418524,
+                "longitude": 126.7233363082043,
+                "uuid": "05ffba31-eaa3-4c77-8256-1f168d0f9b5f"
+            },
+            "bike18": {
+                "latitude": 37.51684164158397,
+                "longitude": 126.72321000245596,
+                "uuid": "63c2575e-65d4-420c-b8b8-50e8081fb7f9"
+            },
+            "bike19": {
+                "latitude": 37.51646953427717,
+                "longitude": 126.7249692610938,
+                "uuid": "4f6f6716-387d-4998-92e2-69001bb61d95"
+            },
+            "bike20": {
+                "latitude": 37.51543907359014, 
+                "longitude": 126.7229393472809,
+                "uuid": "332c9f81-2ba5-453d-9f8a-7c8615a7e4e0"
+            },
+            "bike21": {
+                "latitude": 37.513601110668105, 
+                "longitude": 126.72629449779559,
+                "uuid": "6718a35a-2b0e-4404-af05-097e69f232b2"
+            },
+            "bike22": {
+                "latitude": 37.51609858359959, 
+                "longitude": 126.72481491617197,
+                "uuid": "fe000c8b-15e3-4cdb-9bb0-d153806a1449"
+            },
+            "bike23": {
+                "latitude": 37.51543907359014, 
+                "longitude": 126.7229393472809,
+                "uuid": "b3b811ac-49ed-40de-a281-24cba61ad6a5"
+            },
+            "bike24": {
+                "latitude": 37.517844618214596,  
+                "longitude": 126.7255456850648,
+                "uuid": "65a4b3ac-d832-4810-9e76-eada8064bbc3"
+            },
+            "bike25": {
+                "latitude": 37.51626317060182, 
+                "longitude": 126.72625841035914,
+                "uuid": "83c577eb-4ecb-42a7-b7c5-7b999b479970"
+            },
+            "bike26": {
+                "latitude": 37.51760847658201,  
+                "longitude": 126.725608837939,
+                "uuid": "4a06c8e3-8d65-4f75-bc8e-050abaff2463"
+            },
+            "bike27": {
+                "latitude": 37.517801683427884, 
+                "longitude": 126.72710646324097,
+                "uuid": "454cf43c-6eaf-4d2b-a4ba-dafb7173817c"
+            },
+            "bike28": {
+                "latitude": 37.51589106041053, 
+                "longitude": 126.72523894253308,
+                "uuid": "b1ded268-0ded-423a-b775-11fb30f72865"
+            },
+            "bike29": {
+                "latitude": 37.51786608559867, 
+                "longitude": 126.72553666322565,
+                "uuid": "bead8aa7-0dfa-45fb-a3ef-eaeb2f6bf1a3"
+            },
+            "bike30": {
+                "latitude": 37.518180939855775, 
+                "longitude": 126.72378642642695,
+                "uuid": "1083896e-02de-4bf2-afe2-e55ed7b46fa6"
+            }
+        }
+    
+}

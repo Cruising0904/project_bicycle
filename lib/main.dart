@@ -1,7 +1,9 @@
 import 'package:bicycle_flutter/func/fire_auth.dart';
+import 'package:bicycle_flutter/func/firebata.dart';
 import 'package:bicycle_flutter/func/google_signin.dart';
 import 'package:bicycle_flutter/layout/home.dart';
 import 'package:bicycle_flutter/test/test.dart';
+import 'package:bicycle_flutter/view/components/map/markers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,13 +19,14 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   await LastGeo.init();
+  await MarkerData.init();
   await Firebase.initializeApp();
+  await FireData.init();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
-  // static final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(

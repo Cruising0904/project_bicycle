@@ -1,14 +1,12 @@
 import 'dart:async';
-import 'package:bicycle_flutter/func/fetch_last_geo.dart';
 
-import 'package:bicycle_flutter/main.dart';
+import 'package:bicycle_flutter/func/fetch_last_geo.dart';
+import 'package:bicycle_flutter/view/components/map/markers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bicycle_flutter/func/fetch_last_geo.dart';
 
 class GMap extends StatefulWidget {
   @override
@@ -25,10 +23,13 @@ class _GMapState extends State<GMap> with WidgetsBindingObserver {
   late StreamSubscription<LocationData> lcs;
   Location currentLocation = Location();
 
+  Set<Marker> markers = {};
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
+    // print(markers);
 
     setState(() {
       getLocation();
@@ -68,10 +69,8 @@ class _GMapState extends State<GMap> with WidgetsBindingObserver {
     }
   }
 
-  final Set<Marker> _markers = {};
   var location;
   void getLocation() async {
-    // location = await currentLocation.getLocation();
     lcs = currentLocation.onLocationChanged.listen((LocationData loc) {
       _lat = loc.latitude!;
       _lon = loc.longitude!;
@@ -79,36 +78,17 @@ class _GMapState extends State<GMap> with WidgetsBindingObserver {
         target: LatLng(loc.latitude ?? _lat, loc.longitude ?? _lon),
         zoom: 17.0,
       )));
-
-      // setState(() { // 마커 변경할때 씀.
-      //   _markers.add(Marker(
-      //       markerId: MarkerId('Home'),
-      //       position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)));
-      // });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // return location == null
-    //     ? Container(
-    //         child: Center(
-    //           child: Text(
-    //             'loading map..',
-    //             style: TextStyle(
-    //                 fontFamily: 'Avenir-Medium', color: Colors.grey[400]),
-    //           ),
-    //         ),
-    //       )
-    //     :
     return SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Stack(children: <Widget>[
           GoogleMap(
-         
-            // myLocationEnabled: true,
-
+            myLocationEnabled: true,
             myLocationButtonEnabled: false,
             mapToolbarEnabled: false,
             zoomControlsEnabled: false,
@@ -119,7 +99,7 @@ class _GMapState extends State<GMap> with WidgetsBindingObserver {
             onMapCreated: (GoogleMapController controller) {
               _controller = controller;
             },
-            markers: _markers,
+            markers: getBikeMarkers(),
           ),
           // Row(
           //     mainAxisAlignment: MainAxisAlignment.center,
@@ -184,24 +164,18 @@ class _GMapState extends State<GMap> with WidgetsBindingObserver {
         ]));
   }
 
-  Widget getBottomSheet(String s) {
-    return Stack(children: <Widget>[
-      Container(
-          margin: EdgeInsets.only(top: 32),
-          color: Colors.white,
-          child: Column(
-            children: <Widget>[
-              Container(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: FloatingActionButton(
-                      child: Icon(Icons.navigation), onPressed: () {}),
-                ),
-              )
-            ],
-          ))
-    ]);
+  Set<Marker> getBikeMarkers() {
+    print('getMarker=');
+    // print(MarkerData.to);
+    try {
+      setState(() {
+        markers = MarkerData.to;
+        print(markers);
+      });
+    } catch (e) {
+      print('데이터 넣을ㄸ 에러 $e');
+    }
+
+    return markers.toSet();
   }
 }
